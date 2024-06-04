@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import HandyJSON
 
 struct Welcome1Element: Codable {
     var id: String
@@ -15,7 +16,8 @@ struct Welcome1Element: Codable {
     var employee_age: String
 }
 
-struct WelcomeElement: Codable {
-    var name: String
-    var code: String
+struct WelcomeElement: HandyJSON {
+    
+    var name: String = ""
+    var code: String = ""
 }

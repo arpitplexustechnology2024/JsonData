@@ -7,23 +7,45 @@
 
 import UIKit
 
-class HandyJsonViewController: UIViewController {
+class HandyJsonViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var users: [WelcomeElement] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}
+        tableView.dataSource = self
+                tableView.delegate = self
+                
+                loadUsers()
+            }
+            
+            func loadUsers() {
+                DataLoader.shared.loadUsers { [weak self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let users):
+                            self?.users = users
+                            self?.tableView.reloadData()
+                        case .failure(let error):
+                            print("Failed to load users: \(error)")
+                        }
+                    }
+                }
+            }
+            
+            // MARK: - UITableViewDataSource
+            func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+                return users.count
+            }
+            
+            func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CountryTableViewCell", for: indexPath) as! CountryTableViewCell
+                let user = users[indexPath.row]
+                cell.nameLbl.text = user.name
+                cell.codeLbl.text = user.code
+                return cell
+            }
+        }

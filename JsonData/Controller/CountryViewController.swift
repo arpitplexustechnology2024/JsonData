@@ -26,8 +26,8 @@ class CountryViewController: UIViewController {
         guard let fileLocation = Bundle.main.url(forResource: "country", withExtension: "json") else {return}
         do {
             let data = try Data(contentsOf: fileLocation)
-            let result = try JSONDecoder().decode([WelcomeElement].self, from: data)
-            self.model = result
+           // let result = try JSONDecoder().decode([WelcomeElement].self, from: data)
+           // self.model = result
         } catch {
             print("Parsing Error")
         }
